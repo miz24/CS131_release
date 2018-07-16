@@ -27,7 +27,10 @@ def conv(image, kernel):
     padded = np.pad(image, pad_width, mode='edge')
 
     ### YOUR CODE HERE
-    pass
+    for i in range(Hi):
+        for j in range(Wi):
+            out[i][j] = np.sum(np.multiply(padded[i:i+Hk, j:j+Wk], kernel))
+
     ### END YOUR CODE
 
     return out
@@ -52,7 +55,13 @@ def gaussian_kernel(size, sigma):
     kernel = np.zeros((size, size))
 
     ### YOUR CODE HERE
-    pass
+    k = (size-1)/2     #the size must be odd number
+
+    for i in range(size):
+        for j in range(size):
+            val_exp = np.exp(-(np.square(i-k)+np.square(j-k))/(2*np.square(sigma)))
+            kernel[i][j] = 1/(2*np.pi*sigma*sigma) * val_exp
+
     ### END YOUR CODE
 
     return kernel
@@ -69,10 +78,18 @@ def partial_x(img):
         out: x-derivative image
     """
 
-    out = None
+    #out = None
 
     ### YOUR CODE HERE
-    pass
+    Hi, Wi = img.shape
+    out = np.zeros((Hi, Wi))
+    kernel = np.array(
+    [[ 0.0, 0.0, 0.0],
+     [ -0.5, 0.0, 0.5],
+     [ 0.0, 0.0, 0.0]])
+    
+    out = conv(img, kernel)
+    
     ### END YOUR CODE
 
     return out
@@ -89,10 +106,17 @@ def partial_y(img):
         out: y-derivative image
     """
 
-    out = None
+    #out = None
 
     ### YOUR CODE HERE
-    pass
+    Hi, Wi = img.shape
+    out = np.zeros((Hi, Wi))
+    kernel = np.array(
+    [[ 0.0, -0.5, 0.0],   
+     [ 0.0, 0.0, 0.0],
+     [ 0.0, 0.5, 0.0]])
+        
+    out = conv(img, kernel)
     ### END YOUR CODE
 
     return out
@@ -113,7 +137,12 @@ def gradient(img):
     theta = np.zeros(img.shape)
 
     ### YOUR CODE HERE
-    pass
+    Gx = partial_x(img)
+    Gy = partial_y(img)
+    
+    G = np.sqrt(np.multiply(Gx, Gx) + np.multiply(Gy, Gy))
+    theta = np.arctan2(Gy, Gx)
+    
     ### END YOUR CODE
 
     return G, theta
