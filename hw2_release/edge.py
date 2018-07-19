@@ -142,6 +142,8 @@ def gradient(img):
     
     G = np.sqrt(np.multiply(Gx, Gx) + np.multiply(Gy, Gy))
     theta = np.arctan2(Gy, Gx)
+    theta = np.degrees(theta)
+    theta = theta + ((theta<0)*360.0)
     
     ### END YOUR CODE
 
@@ -168,7 +170,24 @@ def non_maximum_suppression(G, theta):
     theta = np.floor((theta + 22.5) / 45) * 45
 
     ### BEGIN YOUR CODE
-    pass
+    for i in range(1, H-1):
+        for j in range(1, W-1):
+            if theta[i, j] == 0 or theta[i, j] == 180:
+                if G[i, j]>=G[i, j+1] and G[i, j]>=G[i, j-1]:
+                    out[i, j] = G[i,j]
+                    
+            elif theta[i, j] == 45 or theta[i, j] == 225:
+                if G[i, j]>=G[i-1, j+1] and G[i, j]>=G[i+1, j-1]:
+                    out[i, j] = G[i, j]
+                
+            elif theta[i, j] == 90 or theta[i, j] == 270:
+                if G[i, j]>=G[i+1, j] and G[i, j]>=G[i-1, j]:
+                    out[i, j] = G[i, j]
+                
+            elif theta[i, j] == 135 or theta[i, j] == 315:
+                if G[i, j]>=G[i-1, j-1] and G[i, j]>=G[i+1, j+1]:
+                    out[i, j] = G[i, j]
+                
     ### END YOUR CODE
 
     return out
@@ -193,7 +212,8 @@ def double_thresholding(img, high, low):
     weak_edges = np.zeros(img.shape)
 
     ### YOUR CODE HERE
-    pass
+    strong_edges = np.multiply((img>high)*1.0, img)
+    weak_edges = 
     ### END YOUR CODE
 
     return strong_edges, weak_edges
