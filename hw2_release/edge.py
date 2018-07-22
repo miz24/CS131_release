@@ -342,7 +342,18 @@ def hough_transform(img):
     # Find rho corresponding to values in thetas
     # and increment the accumulator in the corresponding coordiate.
     ### YOUR CODE HERE
-    pass
+    for i in range(len(ys)):
+        y = ys[i]
+        x = xs[i]
+        
+        rho_array = (np.floor(x*cos_t + y*sin_t)).astype(int)
+        
+        x_fill = rho_array + diag_len
+        y_fill = np.arange(0, 180)
+        
+        
+        accumulator[x_fill, y_fill] += 1   
+             
     ### END YOUR CODE
 
     return accumulator, rhos, thetas

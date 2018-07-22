@@ -35,10 +35,32 @@ def kmeans(features, k, num_iters=100):
     assignments = np.zeros(N)
 
     for n in range(num_iters):
+        
+        print(n)
         ### YOUR CODE HERE
-        pass
+        # Step 1: iterate over all samples to compute dist to centers 
+        #         and assign clusters
+        dists = np.zeros(k)
+        assignments_pre = np.copy(assignments)
+        
+        for i in range(N):
+            sample = features[i, :]
+            
+            for j in range(k):
+                center = centers[j]
+                dists[j] = np.linalg.norm(sample - center)
+            
+            assignments[i] = np.argmin(dists)
+        
+        # Step 2: stop if assignment is not changed
+        if np.array_equal(assignments, assignments_pre):
+            break
+        
+        # Step 3: compute new center of each class
+        for j in range(k):
+            centers[j] = np.mean(features[np.where(assignments == j)], axis = 0)
+        
         ### END YOUR CODE
-
     return assignments
 
 def kmeans_fast(features, k, num_iters=100):
@@ -71,8 +93,24 @@ def kmeans_fast(features, k, num_iters=100):
     assignments = np.zeros(N)
 
     for n in range(num_iters):
+        print(n)
         ### YOUR CODE HERE
-        pass
+        assignments_pre = np.copy(assignments)
+        
+        # Step 1: iterate over all samples to compute dist to centers 
+        #         and assign clusters
+        
+        distances = np.sqrt(((features - centers[:, np.newaxis])**2).sum(axis=2))
+        assignments= np.argmin(distances, axis=0)
+        
+        # Step 2: stop if assignment is not changed
+        if np.array_equal(assignments, assignments_pre):
+            break
+        
+        # Step 3: compute new center of each class
+        for j in range(k):
+            centers[j] = np.mean(features[np.where(assignments == j)], axis = 0)
+        
         ### END YOUR CODE
 
     return assignments
@@ -145,7 +183,9 @@ def color_features(img):
     features = np.zeros((H*W, C))
 
     ### YOUR CODE HERE
-    pass
+    for i in range(H):
+        for j in range(W):
+            features[i*W+j, :] = img[i, j, :]
     ### END YOUR CODE
 
     return features
@@ -173,7 +213,16 @@ def color_position_features(img):
     features = np.zeros((H*W, C+2))
 
     ### YOUR CODE HERE
-    pass
+    for i in range(H):
+        for j in range(W):
+            features[i*W+j,0:3] = img[i,j,:]
+            features[i*W+j, 3] = i
+            features[i*W+j, 4] = j
+    for k in range(C+2):
+        features[:, k] = features[:, k] - np.mean(features[:, k])
+        features[:, k] = features[:, k] / np.std(features[:,k])
+    
+    
     ### END YOUR CODE
 
     return features
