@@ -35,8 +35,7 @@ def kmeans(features, k, num_iters=100):
     assignments = np.zeros(N)
 
     for n in range(num_iters):
-        
-        print(n)
+       
         ### YOUR CODE HERE
         # Step 1: iterate over all samples to compute dist to centers 
         #         and assign clusters
@@ -93,7 +92,7 @@ def kmeans_fast(features, k, num_iters=100):
     assignments = np.zeros(N)
 
     for n in range(num_iters):
-        print(n)
+       
         ### YOUR CODE HERE
         assignments_pre = np.copy(assignments)
         
@@ -262,7 +261,10 @@ def compute_accuracy(mask_gt, mask):
 
     accuracy = None
     ### YOUR CODE HERE
-    pass
+    agree_score = np.sum((mask_gt == mask))
+    H, W = mask_gt.shape
+    accuracy = agree_score / (H*W)
+    
     ### END YOUR CODE
 
     return accuracy

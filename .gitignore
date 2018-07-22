@@ -2,3 +2,6 @@
 *.xml
 *.iml
 hw2-checkpoint.ipynb
+hw3-checkpoint.ipynb
+hw5_release/data_bb
+hw5_release/.ipynb_checkpoints
