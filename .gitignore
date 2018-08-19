@@ -5,3 +5,6 @@ hw2-checkpoint.ipynb
 hw3-checkpoint.ipynb
 hw5_release/data_bb
 hw5_release/.ipynb_checkpoints
+*.gz
+*.jpg
+hw6-checkpoint.ipynb

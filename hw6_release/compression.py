@@ -20,7 +20,24 @@ def compress_image(image, num_values):
     #     1. Get SVD of the image
     #     2. Only keep the top `num_values` singular values, and compute `compressed_image`
     #     3. Compute the compressed size
-    pass
+    
+    # 1. Get SVD of 1 channel image
+    #    The value of s has been sorted descending
+    U, s, V = np.linalg.svd(image, full_matrices = True)
+    
+    # 2. Keep top num_values singular value and vector
+    U_c = U[:, 0:num_values]
+    S_c = np.diag(s[0:num_values])
+    V_c = V[0:num_values, :]
+    
+    
+    # 3. Reconstruct the compressed image
+    compressed_image = np.dot(U_c, np.dot(S_c, V_c))
+    
+    H_c, W_c = compressed_image.shape
+    
+    compressed_size = U_c.size + V_c.size + num_values
+    
     # END YOUR CODE
 
     assert compressed_image.shape == image.shape, \
